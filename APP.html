@@ -1,0 +1,1741 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clínica em Ação</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        .prose strong {
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen p-4 sm:p-6 bg-gray-100">
+
+    <div id="app" class="bg-white rounded-2xl shadow-xl overflow-hidden w-full max-w-4xl min-h-[85vh] flex flex-col">
+        
+        <!-- Header -->
+        <header class="bg-teal-600 text-white p-4 sm:p-6 flex items-center justify-between shadow-lg">
+            <h1 class="text-2xl sm:text-3xl font-bold">Clínica em Ação</h1>
+            <div class="flex items-center space-x-2">
+                <span class="text-xs sm:text-sm font-medium">Usuário: Admin</span>
+                <!-- Fictional profile image -->
+                <img src="https://placehold.co/40x40/FFFFFF/000?text=A" alt="Avatar do usuário" class="rounded-full border-2 border-white">
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main id="main-content" class="flex-grow p-4 sm:p-6 overflow-y-auto">
+            <!-- Conteúdo será injetado aqui pelo JavaScript -->
+        </main>
+
+        <!-- Navigation Bar -->
+        <nav class="bg-gray-200 p-2 sm:p-4 border-t-4 border-teal-500">
+            <ul class="flex justify-around items-center text-sm sm:text-base font-semibold text-gray-700">
+                <li><button onclick="showSection('protocolos')" class="nav-btn transition-all duration-300 ease-in-out hover:text-teal-600 focus:outline-none focus:text-teal-600 px-2 py-1 rounded-full">Protocolos</button></li>
+                <li><button onclick="showSection('calculadoras')" class="nav-btn transition-all duration-300 ease-in-out hover:text-teal-600 focus:outline-none focus:text-teal-600 px-2 py-1 rounded-full">Calculadoras</button></li>
+                <li><button onclick="showSection('mapa_cirurgico')" class="nav-btn transition-all duration-300 ease-in-out hover:text-teal-600 focus:outline-none focus:text-teal-600 px-2 py-1 rounded-full">Mapa Cirúrgico</button></li>
+                <li><button onclick="showSection('prontuarios')" class="nav-btn transition-all duration-300 ease-in-out hover:text-teal-600 focus:outline-none focus:text-teal-600 px-2 py-1 rounded-full">Prontuários</button></li>
+                <li><button onclick="showSection('leitos')" class="nav-btn transition-all duration-300 ease-in-out hover:text-teal-600 focus:outline-none focus:text-teal-600 px-2 py-1 rounded-full">Leitos</button></li>
+                <li><button onclick="showSection('censo_diario')" class="nav-btn transition-all duration-300 ease-in-out hover:text-teal-600 focus:outline-none focus:text-teal-600 px-2 py-1 rounded-full">Censo Diário</button></li>
+                <li><button onclick="showSection('farmacia')" class="nav-btn transition-all duration-300 ease-in-out hover:text-teal-600 focus:outline-none focus:text-teal-600 px-2 py-1 rounded-full">Farmácia</button></li>
+                <li><button onclick="showSection('vigilancia')" class="nav-btn transition-all duration-300 ease-in-out hover:text-teal-600 focus:outline-none focus:text-teal-600 px-2 py-1 rounded-full">Vigilância</button></li>
+                <li><button onclick="showSection('assistencia')" class="nav-btn transition-all duration-300 ease-in-out hover:text-teal-600 focus:outline-none focus:text-teal-600 px-2 py-1 rounded-full">Assistência</button></li>
+            </ul>
+        </nav>
+    </div>
+
+    <script>
+        const mainContent = document.getElementById('main-content');
+        
+        // Dados fictícios para protocolos, fórum, mapa cirúrgico, prontuários, leitos e farmácia
+        const mockProtocols = {
+            'sepse': {
+                title: 'Protocolo de Sepse',
+                content: `
+                    <p class="text-sm sm:text-base text-gray-700 mb-4">A sepse é uma disfunção orgânica com risco de vida causada por uma resposta desregulada do hospedeiro a uma infecção.</p>
+                    <h3 class="text-lg sm:text-xl font-semibold mb-2 text-teal-600">Pacote de 1 Hora:</h3>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700">
+                        <li>1. Coletar culturas (hemocultura) antes de iniciar antibióticos.</li>
+                        <li>2. Administrar antibióticos de amplo espectro.</li>
+                        <li>3. Medir o nível de lactato. Repetir se o nível inicial for > 2 mmol/L.</li>
+                        <li>4. Administrar cristaloides (30 mL/kg) para hipotensão ou lactato > 4 mmol/L.</li>
+                        <li>5. Iniciar vasopressores (ex: Noradrenalina) se a hipotensão persistir.</li>
+                    </ul>
+                `
+            },
+            'pcr': {
+                title: 'Protocolo de PCR (Adulto)',
+                content: `
+                    <p class="text-sm sm:text-base text-gray-700 mb-4">A Parada Cardiorrespiratória (PCR) é a cessação abrupta da circulação sanguínea efetiva.</p>
+                    <h3 class="text-lg sm:text-xl font-semibold mb-2 text-teal-600">Algoritmo ACLS:</h3>
+                    <ol class="list-decimal list-inside space-y-2 text-gray-700">
+                        <li>Checar responsividade e respiração. Chamar por ajuda (emergência).</li>
+                        <li>Iniciar compressões torácicas de alta qualidade (100-120/min).</li>
+                        <li>Garantir vias aéreas e ventilação.</li>
+                        <li>Monitorar ritmo cardíaco.</li>
+                        <li>Se ritmo chocável (FV/TV sem pulso), desfibrilar.</li>
+                        <li>Administrar medicamentos apropriados (Adrenalina, Amiodarona) e identificar causas reversíveis (5 Hs e 5 Ts).</li>
+                    </ol>
+                `
+            },
+            'choque_hemorragico': {
+                title: 'Protocolo de Choque Hemorrágico',
+                content: `
+                    <p class="text-sm sm:text-base text-gray-700 mb-4">O choque hemorrágico é a perda de volume sanguíneo suficiente para comprometer a perfusão tecidual.</p>
+                    <h3 class="text-lg sm:text-xl font-semibold mb-2 text-teal-600">Classificação e Manejo:</h3>
+                    <p class="text-gray-700 mb-2 font-semibold">Grau I (até 750 mL):</p>
+                    <p class="text-gray-700 mb-4">Mínima taquicardia. Tratamento: reposição de cristaloides.</p>
+                    <p class="text-gray-700 mb-2 font-semibold">Grau III (1500-2000 mL):</p>
+                    <p class="text-700 mb-4">Taquicardia, hipotensão. Tratamento: cristaloides e iniciar transfusão sanguínea.</p>
+                    <p class="text-gray-700 mb-2 font-semibold">Grau IV (> 2000 mL):</p>
+                    <p class="text-gray-700 mb-4">Hipotensão grave, pulsos periféricos ausentes. Tratamento: transfusão maciça imediata.</p>
+                `
+            },
+            'avc': {
+                title: 'Protocolo de Manejo de AVC',
+                content: `
+                    <p class="text-sm sm:text-base text-gray-700 mb-4">A avaliação rápida e a conduta correta são cruciais no tratamento do Acidente Vascular Cerebral (AVC).</p>
+                    <h3 class="text-lg sm:text-xl font-semibold mb-2 text-teal-600">Pacote AVC - 10 minutos:</h3>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700">
+                        <li>1. Avaliação do paciente: Escala de Cincinnati (FACE, BRAÇO, FALA).</li>
+                        <li>2. Checar tempo de início dos sintomas.</li>
+                        <li>3. Coletar dados vitais e glicemia capilar.</li>
+                        <li>4. Acionar equipe de AVC e iniciar protocolo de emergência.</li>
+                        <li>5. Encaminhar para TC/RM de crânio.</li>
+                    </ul>
+                `
+            },
+            'surto_epidemiologico': {
+                title: 'Protocolo para Surto Epidemiológico',
+                content: `
+                    <p class="text-sm sm:text-base text-gray-700 mb-4">A identificação e o manejo rápidos de surtos são essenciais para a saúde pública.</p>
+                    <h3 class="text-lg sm:text-xl font-semibold mb-2 text-teal-600">Fluxo de Ação:</h3>
+                    <ol class="list-decimal list-inside space-y-2 text-gray-700">
+                        <li>1. Identificação de casos atípicos ou agrupamento de doenças.</li>
+                        <li>2. Isolamento imediato dos pacientes suspeitos.</li>
+                        <li>3. Coleta de amostras biológicas para identificação do agente.</li>
+                        <li>4. Notificação compulsória às autoridades de saúde (Vigilância Epidemiológica).</li>
+                        <li>5. Acionamento do Comitê de Crise Hospitalar.</li>
+                        <li>6. Plano de contenção: rastreamento de contatos, desinfecção e orientação à equipe.</li>
+                    </ol>
+                `
+            }
+        };
+
+        // Dados do Fórum removidos
+        
+        const surgicalMapData = [
+            { sala: 'CC 1', paciente: 'João Silva', cirurgia: 'Herniorrafia Inguinal', equipe: 'Dr. Pedro A., Enf. Laura G.', status: 'Em Andamento', corStatus: 'bg-yellow-400' },
+            { sala: 'CC 2', paciente: 'Maria Santos', cirurgia: 'Colecistectomia Videolaparoscópica', equipe: 'Dra. Ana B., Enf. Carlos R.', status: 'Próxima', corStatus: 'bg-blue-400' },
+            { sala: 'CC 3', paciente: 'Carlos Lima', cirurgia: 'Artroplastia de Quadril', equipe: 'Dr. Roberto L., Enf. Julia P.', status: 'Concluída', corStatus: 'bg-green-400' },
+            { sala: 'CC 4', paciente: 'Beatriz Costa', cirurgia: 'Tireoidectomia', equipe: 'Dra. Marina F., Enf. Paula C.', status: 'Em Andamento', corStatus: 'bg-yellow-400' },
+        ];
+        
+        let mockPatients = [
+            { id: 'PAC-001', nome: 'Antônio Ferreira', motivo: 'AVC Isquêmico', data_admissao: '2023-11-20 09:30', status: 'Admitido', leitoId: 'UTI-001', agendamentos: [], endereco: 'Rua das Flores, 123', acompanhantes: 'Maria Ferreira (esposa)', evolucao: [] },
+            { id: 'PAC-002', nome: 'Joana Martins', motivo: 'Sepse grave', data_admissao: '2023-11-21 14:45', status: 'Admitido', leitoId: null, agendamentos: [{ tipo: 'Tomografia de Crânio', data: '22/11/2023 10:00' }], endereco: 'Av. Brasil, 456', acompanhantes: 'Pedro Martins (filho)', evolucao: [] },
+            { id: 'PAC-003', nome: 'Rui Barbosa', motivo: 'Infarto Agudo do Miocárdio', data_admissao: '2023-11-22 08:00', status: 'Admitido', leitoId: 'AP-101', agendamentos: [{ tipo: 'Consulta com Cardiologista', data: '23/11/2023 14:30' }], endereco: 'Rua da Esperança, 789', acompanhantes: 'N/A', evolucao: [{tipo: 'evolucao', data: '2023-11-23 10:00', texto: 'Paciente estável, sem novas queixas.'}, {tipo: 'lesao_por_pressao', data: '2023-11-24 16:00', localizacao: 'Sacro', estagio: 'Estágio 1'}] },
+            { id: 'PAC-004', nome: 'Lúcia Pereira', motivo: 'Pneumonia Comunitária', data_admissao: '2023-11-23 11:20', status: 'Admitido', leitoId: 'EA-005', agendamentos: [{ tipo: 'Raio-X de Tórax', data: '24/11/2023 09:00' }], endereco: 'Travessa da Saudade, 101', acompanhantes: 'N/A', evolucao: [] },
+            { id: 'PAC-005', nome: 'Fernando Oliveira', motivo: 'Fratura de Fêmur', data_admissao: '2023-11-24 16:00', status: 'Admitido', leitoId: null, agendamentos: [{ tipo: 'Consulta com Ortopedista', data: '24/11/2023 16:00' }], endereco: 'Praça da Liberdade, 222', acompanhantes: 'João Oliveira (irmão)', evolucao: [] },
+            { id: 'PAC-006', nome: 'Sofia Mendes', motivo: 'Apendicite', data_admissao: '2023-11-18 10:00', status: 'Alta', leitoId: null, agendamentos: [], data_alta: '2023-11-20 15:00', endereco: 'Rua do Comércio, 333', acompanhantes: 'Mãe e pai', evolucao: [] },
+            { id: 'PAC-007', nome: 'Gustavo Lima', motivo: 'Insuficiência Renal Crônica', data_admissao: '2023-11-25 04:00', status: 'Admitido', leitoId: 'UTI-002', agendamentos: [], endereco: 'Avenida Sete, 444', acompanhantes: 'N/A', evolucao: [] },
+            { id: 'PAC-008', nome: 'Helena Pires', motivo: 'Infecção do Trato Urinário', data_admissao: '2023-11-25 18:00', status: 'Admitido', leitoId: 'EA-001', agendamentos: [], endereco: 'Rua das Pedras, 555', acompanhantes: 'Ana Clara (amiga)', evolucao: [] },
+            { id: 'PAC-009', nome: 'Mariana Castro', motivo: 'Reação Alérgica', data_admissao: '2023-11-26 09:30', status: 'Admitido', leitoId: null, agendamentos: [], endereco: 'Alameda Principal, 666', acompanhantes: 'N/A', evolucao: [] },
+            { id: 'PAC-010', nome: 'Roberto Alves', motivo: 'Sepse refratária', data_admissao: '2023-11-20 12:00', status: 'Obito', data_obito: '2023-11-25 10:00', endereco: 'Rua da Amargura, 777', acompanhantes: 'Família', evolucao: [] },
+            { id: 'PAC-011', nome: 'Pedro Henrique', motivo: 'Investigação', data_admissao: '2023-11-27 10:00', status: 'Evasao', data_evasao: '2023-11-27 15:00', endereco: 'Rua da Aventura, 888', acompanhantes: 'N/A', evolucao: [] },
+            { id: 'PAC-012', nome: 'Maria Eduarda', motivo: 'Pós-cirúrgico', data_admissao: '2023-11-27 12:00', status: 'Alta', data_alta: '2023-11-27 18:00', endereco: 'Av. Sete de Setembro, 999', acompanhantes: 'N/A', evolucao: [] },
+            { id: 'PAC-013', nome: 'Julia Vasconcelos', motivo: 'Traumatismo Craniano', data_admissao: '2023-11-27 14:00', status: 'Obito', data_obito: '2023-11-27 19:30', endereco: 'Rua das Palmeiras, 111', acompanhantes: 'Marcos (pai)', evolucao: [] },
+            { id: 'PAC-014', nome: 'Ricardo Neves', motivo: 'Infecção Respiratória', data_admissao: '2023-11-28 09:00', status: 'Admitido', leitoId: 'UTI-004', agendamentos: [], endereco: 'Rua dos Limoeiros, 45', acompanhantes: 'Camila (irmã)', evolucao: [] },
+            { id: 'PAC-015', nome: 'Diana Pereira', motivo: 'Crise Hipertensiva', data_admissao: '2023-11-28 10:15', status: 'Admitido', leitoId: 'AP-104', agendamentos: [], endereco: 'Av. das Castanheiras, 67', acompanhantes: 'N/A', evolucao: [] },
+        ];
+        
+        let mockBeds = [
+            { id: 'UTI-001', localizacao: 'UTI', status: 'Ocupado', paciente: 'PAC-001' },
+            { id: 'UTI-002', localizacao: 'UTI', status: 'Ocupado', paciente: 'PAC-007' },
+            { id: 'UTI-003', localizacao: 'UTI', status: 'Livre', paciente: null },
+            { id: 'UTI-004', localizacao: 'UTI', status: 'Ocupado', paciente: 'PAC-014' },
+            { id: 'AP-101', localizacao: 'Apartamento', status: 'Ocupado', paciente: 'PAC-003' },
+            { id: 'AP-102', localizacao: 'Apartamento', status: 'Livre', paciente: null },
+            { id: 'AP-103', localizacao: 'Apartamento', status: 'Manutenção', paciente: null },
+            { id: 'AP-104', localizacao: 'Apartamento', status: 'Ocupado', paciente: 'PAC-015' },
+            { id: 'EA-001', localizacao: 'Enfermaria A', status: 'Ocupado', paciente: 'PAC-008' },
+            { id: 'EA-002', localizacao: 'Enfermaria A', status: 'Livre', paciente: null },
+            { id: 'EA-003', localizacao: 'Enfermaria A', status: 'Livre', paciente: null },
+            { id: 'EA-004', localizacao: 'Enfermaria A', status: 'Livre', paciente: null },
+            { id: 'EA-005', localizacao: 'Enfermaria A', status: 'Ocupado', paciente: 'PAC-004' },
+            { id: 'EA-006', localizacao: 'Enfermaria B', status: 'Livre', paciente: null },
+            { id: 'EA-007', localizacao: 'Enfermaria B', status: 'Livre', paciente: null },
+        ];
+        
+        let mockCensusData = [
+            {
+                data: '2023-11-25',
+                hora: '08:00',
+                totalPacientes: 7,
+                admitidos: 5,
+                alta: 1,
+                obito: 1,
+                evasao: 0
+            },
+            {
+                data: '2023-11-26',
+                hora: '08:00',
+                totalPacientes: 9,
+                admitidos: 6,
+                alta: 1,
+                obito: 1,
+                evasao: 1
+            },
+        ];
+        
+        let mockPharmacyOrders = [
+            { id: 'ORD-001', paciente: 'Antônio Ferreira', medicamento: 'Morfina', dosagem: '10 mg', quantidade: 2, status: 'Em Preparação', data_pedido: '2023-11-28 10:00' },
+            { id: 'ORD-002', paciente: 'Rui Barbosa', medicamento: 'Nitroglicerina', dosagem: '0.4 mg sublingual', quantidade: 1, status: 'Entregue', data_pedido: '2023-11-28 11:30' },
+            { id: 'ORD-003', paciente: 'Lúcia Pereira', medicamento: 'Ceftriaxona', dosagem: '1 g IV', quantidade: 4, status: 'Pendente', data_pedido: '2023-11-28 12:45' },
+        ];
+
+        let mockInventory = [
+            // Medicamentos
+            { nome: 'Ceftriaxona 1g', tipo: 'Medicamento', quantidade: 55, limite_minimo: 50 },
+            { nome: 'Noradrenalina Amp. 4mg', tipo: 'Medicamento', quantidade: 15, limite_minimo: 30 },
+            { nome: 'Paracetamol 750mg', tipo: 'Medicamento', quantidade: 320, limite_minimo: 100 },
+            { nome: 'Fentanil 50mcg/mL', tipo: 'Medicamento', quantidade: 8, limite_minimo: 15 },
+            { nome: 'Dipirona Sódica 500mg/mL', tipo: 'Medicamento', quantidade: 200, limite_minimo: 150 },
+            // Insumos
+            { nome: 'Seringa 10ml', tipo: 'Insumo', quantidade: 800, limite_minimo: 500 },
+            { nome: 'Agulha 25x7', tipo: 'Insumo', quantidade: 120, limite_minimo: 200 },
+            { nome: 'Luva de Procedimento (Caixa)', tipo: 'Insumo', quantidade: 45, limite_minimo: 50 },
+            { nome: 'Cateter Intravenoso #20', tipo: 'Insumo', quantidade: 90, limite_minimo: 100 },
+            { nome: 'Máscara Cirúrgica N95', tipo: 'Insumo', quantidade: 60, limite_minimo: 75 },
+        ];
+
+        let mockSurveillanceCases = [
+            { id: 'EPI-001', paciente: 'Joana Martins', doenca: 'COVID-19', data_notificacao: '2023-11-21 15:00', status_investigacao: 'Em Análise' },
+            { id: 'EPI-002', paciente: 'Ricardo Neves', doenca: 'Tuberculose', data_notificacao: '2023-11-28 09:30', status_investigacao: 'Confirmado' },
+            { id: 'EPI-003', paciente: 'Pedro Henrique', doenca: 'Dengue', data_notificacao: '2023-11-27 10:30', status_investigacao: 'Investigação' },
+        ];
+        
+        // Dados para CCIH/CME
+        const mockCCIHData = {
+            crbsi: {
+                lastMonth: 1.5, // Casos por 1000 cateteres/dia
+                target: 1.0,
+                cases: 2
+            },
+            pavi: {
+                lastMonth: 3.2, // Casos por 1000 ventiladores/dia
+                target: 2.5,
+                cases: 4
+            }
+        };
+
+        const mockCMEData = [
+            { item: 'Pacote Cirúrgico Ortopédico', ciclo: 'A-2025-001', status: 'Falha Biológica', date: '2025-10-01 08:30', alert: 'bg-red-500' },
+            { item: 'Sondas Vesicais (Lote 45)', ciclo: 'B-2025-155', status: 'Liberado', date: '2025-10-01 10:45', alert: 'bg-green-500' },
+            { item: 'Instrumental Neurocirurgia', ciclo: 'A-2025-002', status: 'Liberado com Atraso', date: '2025-10-01 12:00', alert: 'bg-yellow-500' },
+        ];
+
+        const mockDailyCases = [
+            { date: '2023-11-20', notified: 2, confirmed: 1, discarded: 1 },
+            { date: '2023-11-21', notified: 4, confirmed: 2, discarded: 2 },
+            { date: '2023-11-22', notified: 3, confirmed: 1, discarded: 2 },
+            { date: '2023-11-23', notified: 5, confirmed: 3, discarded: 2 },
+            { date: '2023-11-24', notified: 3, confirmed: 1, discarded: 2 },
+            { date: '2023-11-25', notified: 6, confirmed: 4, discarded: 2 },
+            { date: '2023-11-26', notified: 4, confirmed: 2, discarded: 2 },
+            { date: '2023-11-27', notified: 5, confirmed: 3, discarded: 2 },
+            { date: '2023-11-28', notified: 7, confirmed: 5, discarded: 2 },
+        ];
+
+        let farmaciaView = 'pedidos'; // Estado interno da seção Farmácia
+
+        // Função para mostrar a seção selecionada
+        function showSection(section) {
+            mainContent.innerHTML = '';
+            const navButtons = document.querySelectorAll('.nav-btn');
+            navButtons.forEach(btn => btn.classList.remove('text-teal-600', 'font-bold'));
+            
+            let htmlContent = '';
+            switch (section) {
+                case 'protocolos':
+                    document.querySelector('[onclick="showSection(\'protocolos\')"]').classList.add('text-teal-600', 'font-bold');
+                    htmlContent = renderProtocols();
+                    break;
+                case 'calculadoras':
+                    document.querySelector('[onclick="showSection(\'calculadoras\')"]').classList.add('text-teal-600', 'font-bold');
+                    htmlContent = renderCalculators();
+                    break;
+                case 'mapa_cirurgico':
+                    document.querySelector('[onclick="showSection(\'mapa_cirurgico\')"]').classList.add('text-teal-600', 'font-bold');
+                    htmlContent = renderSurgicalMap();
+                    break;
+                case 'prontuarios':
+                    document.querySelector('[onclick="showSection(\'prontuarios\')"]').classList.add('text-teal-600', 'font-bold');
+                    htmlContent = renderProntuarios();
+                    break;
+                case 'leitos':
+                    document.querySelector('[onclick="showSection(\'leitos\')"]').classList.add('text-teal-600', 'font-bold');
+                    htmlContent = renderLeitos();
+                    break;
+                case 'censo_diario':
+                    document.querySelector('[onclick="showSection(\'censo_diario\')"]').classList.add('text-teal-600', 'font-bold');
+                    htmlContent = renderCensus();
+                    break;
+                case 'farmacia':
+                    document.querySelector('[onclick="showSection(\'farmacia\')"]').classList.add('text-teal-600', 'font-bold');
+                    htmlContent = renderFarmacia();
+                    break;
+                case 'vigilancia':
+                    document.querySelector('[onclick="showSection(\'vigilancia\')"]').classList.add('text-teal-600', 'font-bold');
+                    htmlContent = renderVigilancia();
+                    setTimeout(() => {
+                        drawControlChart('controlChart', mockDailyCases);
+                    }, 100);
+                    break;
+                case 'assistencia':
+                    document.querySelector('[onclick="showSection(\'assistencia\')"]').classList.add('text-teal-600', 'font-bold');
+                    htmlContent = renderAssistencia();
+                    break;
+            }
+            mainContent.innerHTML = htmlContent;
+        }
+
+        // --- Renderização de Protocolos e Calculadoras (Mantido) ---
+
+        // Renderiza a seção de protocolos
+        function renderProtocols() {
+            return `
+                <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-gray-800">Protocolos de Emergência</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+                    ${Object.keys(mockProtocols).map(key => `
+                        <div class="bg-gray-50 p-6 rounded-xl shadow-md cursor-pointer hover:bg-gray-100 transition-colors duration-300" onclick="showProtocol('${key}')">
+                            <h3 class="text-xl font-semibold mb-2 text-teal-600">${mockProtocols[key].title}</h3>
+                            <p class="text-sm text-gray-600">Clique para ver o protocolo completo.</p>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        // Mostra um protocolo específico
+        function showProtocol(key) {
+            const protocol = mockProtocols[key];
+            mainContent.innerHTML = `
+                <button onclick="showSection('protocolos')" class="mb-4 text-teal-600 font-medium hover:underline flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                    </svg>
+                    Voltar para Protocolos
+                </button>
+                <div class="bg-gray-50 p-6 sm:p-8 rounded-xl shadow-md">
+                    <h2 class="text-xl sm:text-2xl font-bold mb-4 text-teal-700">${protocol.title}</h2>
+                    <div class="prose max-w-none text-sm sm:text-base">
+                        ${protocol.content}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Renderiza a seção de calculadoras
+        function renderCalculators() {
+            return `
+                <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-gray-800">Calculadoras Médicas</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Calculadora de Noradrenalina -->
+                    <div class="bg-gray-50 p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-semibold mb-4 text-teal-600">Noradrenalina (mcg/kg/min)</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label for="na-peso" class="block text-sm font-medium text-gray-700">Peso (kg):</label>
+                                <input type="number" id="na-peso" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50">
+                            </div>
+                            <div>
+                                <label for="na-dose" class="block text-sm font-medium text-gray-700">Dose (mcg/kg/min):</label>
+                                <input type="number" id="na-dose" step="0.01" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50">
+                            </div>
+                            <div>
+                                <label for="na-concentracao" class="block text-sm font-medium text-gray-700">Concentração (mg/mL):</label>
+                                <input type="number" id="na-concentracao" value="0.5" readonly class="mt-1 block w-full rounded-md border-gray-300 shadow-sm bg-gray-200">
+                            </div>
+                            <button onclick="calculateNoradrenaline()" class="w-full bg-teal-500 text-white py-2 rounded-md font-semibold hover:bg-teal-600 transition-colors duration-300 shadow-md">Calcular</button>
+                        </div>
+                        <div id="na-resultado" class="mt-4 p-3 bg-teal-100 text-teal-800 rounded-lg text-sm font-medium text-center hidden"></div>
+                    </div>
+
+                    <!-- Calculadora de Dopamina -->
+                    <div class="bg-gray-50 p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-semibold mb-4 text-teal-600">Dopamina (mcg/kg/min)</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label for="dop-peso" class="block text-sm font-medium text-gray-700">Peso (kg):</label>
+                                <input type="number" id="dop-peso" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50">
+                            </div>
+                            <div>
+                                <label for="dop-dose" class="block text-sm font-medium text-gray-700">Dose (mcg/kg/min):</label>
+                                <input type="number" id="dop-dose" step="0.1" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50">
+                            </div>
+                            <div>
+                                <label for="dop-concentracao" class="block text-sm font-medium text-gray-700">Concentração (mg/mL):</label>
+                                <input type="number" id="dop-concentracao" value="4" readonly class="mt-1 block w-full rounded-md border-gray-300 shadow-sm bg-gray-200">
+                            </div>
+                            <button onclick="calculateDopamine()" class="w-full bg-teal-500 text-white py-2 rounded-md font-semibold hover:bg-teal-600 transition-colors duration-300 shadow-md">Calcular</button>
+                        </div>
+                        <div id="dop-resultado" class="mt-4 p-3 bg-teal-100 text-teal-800 rounded-lg text-sm font-medium text-center hidden"></div>
+                    </div>
+
+                    <!-- Calculadora de Propofol -->
+                    <div class="bg-gray-50 p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-semibold mb-4 text-teal-600">Propofol (mg para indução)</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label for="prop-peso" class="block text-sm font-medium text-gray-700">Peso (kg):</label>
+                                <input type="number" id="prop-peso" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50">
+                            </div>
+                            <div>
+                                <label for="prop-dose" class="block text-sm font-medium text-gray-700">Dose (mg/kg):</label>
+                                <input type="number" id="prop-dose" step="0.1" value="2.0" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50">
+                            </div>
+                            <button onclick="calculatePropofol()" class="w-full bg-teal-500 text-white py-2 rounded-md font-semibold hover:bg-teal-600 transition-colors duration-300 shadow-md">Calcular</button>
+                        </div>
+                        <div id="prop-resultado" class="mt-4 p-3 bg-teal-100 text-teal-800 rounded-lg text-sm font-medium text-center hidden"></div>
+                    </div>
+
+                    <!-- Calculadora de Fentanil -->
+                    <div class="bg-gray-50 p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-semibold mb-4 text-teal-600">Fentanil (mcg para indução)</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label for="fent-peso" class="block text-sm font-medium text-gray-700">Peso (kg):</label>
+                                <input type="number" id="fent-peso" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50">
+                            </div>
+                            <div>
+                                <label for="fent-dose" class="block text-sm font-medium text-gray-700">Dose (mcg/kg):</label>
+                                <input type="number" id="fent-dose" step="1" value="2" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50">
+                            </div>
+                            <button onclick="calculateFentanyl()" class="w-full bg-teal-500 text-white py-2 rounded-md font-semibold hover:bg-teal-600 transition-colors duration-300 shadow-md">Calcular</button>
+                        </div>
+                        <div id="fent-resultado" class="mt-4 p-3 bg-teal-100 text-teal-800 rounded-lg text-sm font-medium text-center hidden"></div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Lógica das calculadoras (mantida)
+        function calculateNoradrenaline() {
+            const peso = parseFloat(document.getElementById('na-peso').value);
+            const dose = parseFloat(document.getElementById('na-dose').value);
+            const concentracao = parseFloat(document.getElementById('na-concentracao').value);
+            const resultadoDiv = document.getElementById('na-resultado');
+
+            if (isNaN(peso) || isNaN(dose) || peso <= 0 || dose <= 0) {
+                resultadoDiv.textContent = 'Por favor, insira valores válidos.';
+                resultadoDiv.classList.remove('hidden');
+                return;
+            }
+
+            // (Peso em kg * Dose em mcg/kg/min * 60 min/h) / Concentração em mg/mL / 1000 mcg/mg
+            const taxaInfusao = (peso * dose * 60) / (concentracao * 1000);
+            resultadoDiv.textContent = `Taxa de Infusão: ${taxaInfusao.toFixed(2)} mL/h`;
+            resultadoDiv.classList.remove('hidden');
+        }
+        
+        function calculateDopamine() {
+            const peso = parseFloat(document.getElementById('dop-peso').value);
+            const dose = parseFloat(document.getElementById('dop-dose').value);
+            const concentracao = parseFloat(document.getElementById('dop-concentracao').value);
+            const resultadoDiv = document.getElementById('dop-resultado');
+
+            if (isNaN(peso) || isNaN(dose) || peso <= 0 || dose <= 0) {
+                resultadoDiv.textContent = 'Por favor, insira valores válidos.';
+                resultadoDiv.classList.remove('hidden');
+                return;
+            }
+
+            // (Peso em kg * Dose em mcg/kg/min * 60 min/h) / Concentração em mg/mL / 1000 mcg/mg
+            const taxaInfusao = (peso * dose * 60) / (concentracao * 1000);
+            resultadoDiv.textContent = `Taxa de Infusão: ${taxaInfusao.toFixed(2)} mL/h`;
+            resultadoDiv.classList.remove('hidden');
+        }
+
+        function calculatePropofol() {
+            const peso = parseFloat(document.getElementById('prop-peso').value);
+            const dose = parseFloat(document.getElementById('prop-dose').value);
+            const resultadoDiv = document.getElementById('prop-resultado');
+
+            if (isNaN(peso) || isNaN(dose) || peso <= 0 || dose <= 0) {
+                resultadoDiv.textContent = 'Por favor, insira valores válidos.';
+                resultadoDiv.classList.remove('hidden');
+                return;
+            }
+
+            const doseTotal = peso * dose;
+            resultadoDiv.textContent = `Dose total necessária: ${doseTotal.toFixed(2)} mg`;
+            resultadoDiv.classList.remove('hidden');
+        }
+
+        function calculateFentanyl() {
+            const peso = parseFloat(document.getElementById('fent-peso').value);
+            const dose = parseFloat(document.getElementById('fent-dose').value);
+            const resultadoDiv = document.getElementById('fent-resultado');
+
+            if (isNaN(peso) || isNaN(dose) || peso <= 0 || dose <= 0) {
+                resultadoDiv.textContent = 'Por favor, insira valores válidos.';
+                resultadoDiv.classList.remove('hidden');
+                return;
+            }
+
+            const doseTotal = peso * dose;
+            resultadoDiv.textContent = `Dose total necessária: ${doseTotal.toFixed(2)} mcg`;
+            resultadoDiv.classList.remove('hidden');
+        }
+
+        // Renderiza a seção de mapa cirúrgico (Mantida)
+        function renderSurgicalMap() {
+            let tableRows = surgicalMapData.map(cirurgia => `
+                <tr class="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                    <td class="px-4 py-3 text-sm font-medium text-gray-900">${cirurgia.sala}</td>
+                    <td class="px-4 py-3 text-sm text-gray-700">${cirurgia.paciente}</td>
+                    <td class="px-4 py-3 text-sm text-gray-700">${cirurgia.cirurgia}</td>
+                    <td class="px-4 py-3 text-sm text-gray-700">${cirurgia.equipe}</td>
+                    <td class="px-4 py-3 text-sm text-gray-700">
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${cirurgia.corStatus} text-white-800">
+                            ${cirurgia.status}
+                        </span>
+                    </td>
+                </tr>
+            `).join('');
+
+            return `
+                <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-gray-800">Mapa Cirúrgico</h2>
+                <div class="bg-gray-50 p-6 sm:p-8 rounded-xl shadow-md">
+                    <p class="text-gray-600 mb-6">Visão geral em tempo real das cirurgias eletivas do dia.</p>
+                    <div class="overflow-x-auto rounded-lg border border-gray-200">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-100">
+                                <tr>
+                                    <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Sala</th>
+                                    <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Paciente</th>
+                                    <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Cirurgia</th>
+                                    <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Equipe</th>
+                                    <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                ${tableRows}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Renderiza a seção de prontuários (Mantida)
+        function renderProntuarios() {
+            const admittedPatients = mockPatients.filter(p => p.status === 'Admitido');
+            const dischargedPatients = mockPatients.filter(p => p.status === 'Alta');
+            const deceasedPatients = mockPatients.filter(p => p.status === 'Obito');
+            const evadedPatients = mockPatients.filter(p => p.status === 'Evasao');
+
+            return `
+                <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-gray-800">Prontuários</h2>
+                
+                <div class="p-6 sm:p-8 rounded-xl shadow-md bg-white mb-6">
+                    <h3 class="text-xl font-semibold mb-4 text-teal-600">Admitir Novo Paciente</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <input type="text" id="novo-paciente-nome" placeholder="Nome Completo" class="col-span-1 md:col-span-2 p-2 rounded-md border-gray-300 shadow-sm focus:ring-teal-500 focus:border-teal-500">
+                        <input type="text" id="novo-paciente-motivo" placeholder="Motivo da Admissão" class="col-span-1 md:col-span-1 p-2 rounded-md border-gray-300 shadow-sm focus:ring-teal-500 focus:border-teal-500">
+                        <input type="text" id="novo-paciente-endereco" placeholder="Endereço" class="col-span-1 md:col-span-2 p-2 rounded-md border-gray-300 shadow-sm focus:ring-teal-500 focus:border-teal-500">
+                        <input type="text" id="novo-paciente-acompanhantes" placeholder="Acompanhantes" class="col-span-1 md:col-span-1 p-2 rounded-md border-gray-300 shadow-sm focus:ring-teal-500 focus:border-teal-500">
+                        <button onclick="admitirPaciente()" class="col-span-1 md:col-span-3 bg-teal-500 text-white py-2 rounded-md font-semibold hover:bg-teal-600 transition-colors duration-300">Admitir</button>
+                    </div>
+                    <div id="admissao-feedback" class="mt-4 p-3 rounded-lg text-sm font-medium text-center hidden"></div>
+                </div>
+
+                <div class="bg-gray-50 p-6 sm:p-8 rounded-xl shadow-md">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800">Pacientes Admitidos</h3>
+                    <div class="space-y-4">
+                        ${admittedPatients.length > 0 ? admittedPatients.map(paciente => `
+                            <div class="p-4 border border-gray-200 rounded-lg bg-white shadow-sm flex flex-col md:flex-row md:items-center justify-between">
+                                <div class="flex-grow">
+                                    <h4 class="text-lg font-bold text-teal-700">${paciente.nome}</h4>
+                                    <p class="text-sm text-gray-600">ID: ${paciente.id} | Motivo: ${paciente.motivo} | Leito: ${paciente.leitoId || 'N/A'}</p>
+                                    <p class="text-sm text-gray-600">Endereço: ${paciente.endereco || 'N/A'}</p>
+                                    <p class="text-sm text-gray-600">Acompanhantes: ${paciente.acompanhantes || 'N/A'}</p>
+                                    <p class="text-xs text-gray-500 mt-1">Admissão: ${paciente.data_admissao}</p>
+                                    <div class="mt-2 text-sm">
+                                        <h5 class="font-semibold text-gray-700">Agendamentos:</h5>
+                                        <ul class="list-disc list-inside ml-4 text-gray-600">
+                                            ${paciente.agendamentos.length > 0 ? paciente.agendamentos.map(ag => `<li>${ag.tipo} - ${ag.data}</li>`).join('') : '<li>Nenhum agendamento.</li>'}
+                                        </ul>
+                                    </div>
+                                    <div class="mt-4 flex flex-col sm:flex-row sm:space-x-2 space-y-2 sm:space-y-0">
+                                        <input type="text" id="agendar-${paciente.id}" placeholder="Exame/Consulta (ex: RX de Tórax)" class="flex-grow p-2 text-sm rounded-md border-gray-300 shadow-sm focus:ring-teal-500 focus:border-teal-500">
+                                        <button onclick="agendarConsulta('${paciente.id}')" class="bg-blue-500 text-white text-sm py-2 px-4 rounded-md font-semibold hover:bg-blue-600 transition-colors">Agendar</button>
+                                        <button onclick="updatePatientStatus('${paciente.id}', 'Alta')" class="bg-green-500 text-white text-sm py-2 px-4 rounded-md font-semibold hover:bg-green-600 transition-colors">Dar Alta</button>
+                                        <button onclick="updatePatientStatus('${paciente.id}', 'Obito')" class="bg-red-500 text-white text-sm py-2 px-4 rounded-md font-semibold hover:bg-red-600 transition-colors">Declarar Óbito</button>
+                                        <button onclick="updatePatientStatus('${paciente.id}', 'Evasao')" class="bg-orange-500 text-white text-sm py-2 px-4 rounded-md font-semibold hover:bg-orange-600 transition-colors">Evasão</button>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('') : '<p class="text-center text-gray-500">Nenhum paciente admitido no momento.</p>'}
+                    </div>
+                </div>
+                
+                <div class="bg-gray-50 p-6 sm:p-8 rounded-xl shadow-md mt-6">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800">Pacientes com Alta</h3>
+                    <div class="space-y-4">
+                        ${dischargedPatients.length > 0 ? dischargedPatients.map(paciente => `
+                            <div class="p-4 border border-gray-200 rounded-lg bg-white shadow-sm flex flex-col md:flex-row md:items-center justify-between">
+                                <div class="flex-grow">
+                                    <h4 class="text-lg font-bold text-gray-700">${paciente.nome}</h4>
+                                    <p class="text-sm text-gray-600">ID: ${paciente.id} | Motivo: ${paciente.motivo}</p>
+                                    <p class="text-sm text-gray-600">Endereço: ${paciente.endereco || 'N/A'}</p>
+                                    <p class="text-sm text-gray-600">Acompanhantes: ${paciente.acompanhantes || 'N/A'}</p>
+                                    <p class="text-xs text-gray-500 mt-1">Admissão: ${paciente.data_admissao} | Alta: ${paciente.data_alta}</p>
+                                </div>
+                            </div>
+                        `).join('') : '<p class="text-center text-gray-500">Nenhum paciente com alta no momento.</p>'}
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 p-6 sm:p-8 rounded-xl shadow-md mt-6">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800">Pacientes com Óbito</h3>
+                    <div class="space-y-4">
+                        ${deceasedPatients.length > 0 ? deceasedPatients.map(paciente => `
+                            <div class="p-4 border border-gray-200 rounded-lg bg-white shadow-sm flex flex-col md:flex-row md:items-center justify-between bg-red-100">
+                                <div class="flex-grow">
+                                    <h4 class="text-lg font-bold text-red-700">${paciente.nome}</h4>
+                                    <p class="text-sm text-gray-600">ID: ${paciente.id} | Motivo: ${paciente.motivo}</p>
+                                    <p class="text-sm text-gray-600">Endereço: ${paciente.endereco || 'N/A'}</p>
+                                    <p class="text-sm text-gray-600">Acompanhantes: ${paciente.acompanhantes || 'N/A'}</p>
+                                    <p class="text-xs text-gray-500 mt-1">Admissão: ${paciente.data_admissao} | Óbito: ${paciente.data_obito}</p>
+                                </div>
+                            </div>
+                        `).join('') : '<p class="text-center text-gray-500">Nenhum registro de óbito no momento.</p>'}
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 p-6 sm:p-8 rounded-xl shadow-md mt-6">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800">Pacientes com Evasão</h3>
+                    <div class="space-y-4">
+                        ${evadedPatients.length > 0 ? evadedPatients.map(paciente => `
+                            <div class="p-4 border border-gray-200 rounded-lg bg-white shadow-sm flex flex-col md:flex-row md:items-center justify-between bg-orange-100">
+                                <div class="flex-grow">
+                                    <h4 class="text-lg font-bold text-orange-700">${paciente.nome}</h4>
+                                    <p class="text-sm text-gray-600">ID: ${paciente.id} | Motivo: ${paciente.motivo}</p>
+                                    <p class="text-sm text-gray-600">Endereço: ${paciente.endereco || 'N/A'}</p>
+                                    <p class="text-sm text-gray-600">Acompanhantes: ${paciente.acompanhantes || 'N/A'}</p>
+                                    <p class="text-xs text-gray-500 mt-1">Admissão: ${paciente.data_admissao} | Evasão: ${paciente.data_evasao}</p>
+                                </div>
+                            </div>
+                        `).join('') : '<p class="text-center text-gray-500">Nenhum registro de evasão no momento.</p>'}
+                    </div>
+                </div>
+            `;
+        }
+
+        function admitirPaciente() {
+            const nomeInput = document.getElementById('novo-paciente-nome');
+            const motivoInput = document.getElementById('novo-paciente-motivo');
+            const enderecoInput = document.getElementById('novo-paciente-endereco');
+            const acompanhantesInput = document.getElementById('novo-paciente-acompanhantes');
+            const feedbackDiv = document.getElementById('admissao-feedback');
+
+            const nome = nomeInput.value;
+            const motivo = motivoInput.value;
+            const endereco = enderecoInput.value;
+            const acompanhantes = acompanhantesInput.value;
+
+            if (nome && motivo) {
+                const novoId = 'PAC-' + (mockPatients.length + 1).toString().padStart(3, '0');
+                const dataAdmissao = new Date().toLocaleString();
+                
+                mockPatients.push({
+                    id: novoId,
+                    nome: nome,
+                    motivo: motivo,
+                    data_admissao: dataAdmissao,
+                    status: 'Admitido',
+                    leitoId: null,
+                    agendamentos: [],
+                    endereco: endereco,
+                    acompanhantes: acompanhantes,
+                    evolucao: []
+                });
+
+                nomeInput.value = '';
+                motivoInput.value = '';
+                enderecoInput.value = '';
+                acompanhantesInput.value = '';
+                
+                feedbackDiv.textContent = `Paciente ${nome} admitido com sucesso. ID: ${novoId}.`;
+                feedbackDiv.className = 'mt-4 p-3 rounded-lg bg-green-100 text-green-800 text-sm font-medium text-center';
+                feedbackDiv.classList.remove('hidden');
+
+                showSection('prontuarios');
+            } else {
+                feedbackDiv.textContent = 'Por favor, preencha o nome e o motivo da admissão.';
+                feedbackDiv.className = 'mt-4 p-3 rounded-lg bg-red-100 text-red-800 text-sm font-medium text-center';
+                feedbackDiv.classList.remove('hidden');
+            }
+        }
+
+        function agendarConsulta(id) {
+            const agendamentoInput = document.getElementById(`agendar-${id}`);
+            const agendamentoTexto = agendamentoInput.value;
+            
+            if (agendamentoTexto) {
+                const paciente = mockPatients.find(p => p.id === id);
+                if (paciente) {
+                    const dataAgendamento = new Date().toLocaleString();
+                    paciente.agendamentos.push({ tipo: agendamentoTexto, data: dataAgendamento });
+                    showSection('prontuarios');
+                }
+            } else {
+                alert('Por favor, insira o tipo de exame ou consulta.');
+            }
+        }
+
+        function updatePatientStatus(id, newStatus) {
+            const pacienteIndex = mockPatients.findIndex(p => p.id === id);
+            if (pacienteIndex !== -1) {
+                const leitoId = mockPatients[pacienteIndex].leitoId;
+                if (leitoId) {
+                    const leito = mockBeds.find(b => b.id === leitoId);
+                    if (leito) {
+                        leito.status = 'Livre';
+                        leito.paciente = null;
+                    }
+                }
+                
+                mockPatients[pacienteIndex].status = newStatus;
+                const currentDate = new Date().toLocaleString();
+                
+                if (newStatus === 'Alta') {
+                    mockPatients[pacienteIndex].data_alta = currentDate;
+                } else if (newStatus === 'Obito') {
+                    mockPatients[pacienteIndex].data_obito = currentDate;
+                } else if (newStatus === 'Evasao') {
+                    mockPatients[pacienteIndex].data_evasao = currentDate;
+                }
+                
+                mockPatients[pacienteIndex].leitoId = null;
+                showSection('prontuarios');
+            }
+        }
+        
+        // Renderiza a seção de Leitos (Mantida)
+        function renderLeitos() {
+            const leitosPorLocalizacao = mockBeds.reduce((acc, leito) => {
+                (acc[leito.localizacao] = acc[leito.localizacao] || []).push(leito);
+                return acc;
+            }, {});
+
+            let leitosHtml = '';
+            for (const localizacao in leitosPorLocalizacao) {
+                const leitos = leitosPorLocalizacao[localizacao];
+                leitosHtml += `
+                    <div class="mb-8">
+                        <h3 class="text-xl font-semibold mb-4 text-gray-800">${localizacao}</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                            ${leitos.map(leito => {
+                                let bgColor = '';
+                                let textColor = '';
+                                let statusText = '';
+                                let pacienteInfo = '';
+                                
+                                switch (leito.status) {
+                                    case 'Livre':
+                                        bgColor = 'bg-green-500';
+                                        textColor = 'text-white';
+                                        statusText = 'Livre';
+                                        break;
+                                    case 'Ocupado':
+                                        bgColor = 'bg-red-500';
+                                        textColor = 'text-white';
+                                        statusText = 'Ocupado';
+                                        const paciente = mockPatients.find(p => p.id === leito.paciente);
+                                        pacienteInfo = paciente ? `<p class="text-sm font-medium mt-1"><strong>Paciente:</strong> ${paciente.nome}</p>` : '';
+                                        break;
+                                    case 'Manutenção':
+                                        bgColor = 'bg-yellow-500';
+                                        textColor = 'text-gray-800';
+                                        statusText = 'Manutenção';
+                                        break;
+                                }
+
+                                return `
+                                    <div class="p-4 rounded-xl shadow-md ${bgColor} ${textColor}">
+                                        <h4 class="font-bold text-lg">${leito.id}</h4>
+                                        <p class="text-sm">${statusText}</p>
+                                        ${pacienteInfo}
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            let pacientesOptions = mockPatients
+                .filter(p => p.status === 'Admitido')
+                .map(p => `<option value="${p.id}">${p.nome} (${p.id})</option>`).join('');
+
+            let leitosDisponiveisOptions = mockBeds
+                .filter(b => b.status === 'Livre')
+                .map(b => `<option value="${b.id}">${b.id} (${b.localizacao})</option>`).join('');
+
+
+            return `
+                <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-gray-800">Visualização de Leitos</h2>
+                <div class="p-6 sm:p-8 rounded-xl shadow-md bg-white mb-6">
+                    <h3 class="text-xl font-semibold mb-4 text-teal-600">Mover Paciente</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                        <div class="md:col-span-1">
+                            <label for="paciente-selecionado" class="block text-sm font-medium text-gray-700">Paciente:</label>
+                            <select id="paciente-selecionado" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-teal-500 focus:border-teal-500">
+                                <option value="">Selecione um paciente...</option>
+                                ${pacientesOptions}
+                            </select>
+                        </div>
+                        <div class="md:col-span-1">
+                            <label for="leito-destino" class="block text-sm font-medium text-gray-700">Leito de Destino:</label>
+                            <select id="leito-destino" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-teal-500 focus:border-teal-500">
+                                <option value="">Selecione um leito...</option>
+                                ${leitosDisponiveisOptions}
+                            </select>
+                        </div>
+                        <div class="md:col-span-1">
+                            <button onclick="moverPaciente()" class="w-full bg-teal-500 text-white py-2 rounded-md font-semibold hover:bg-teal-600 transition-colors duration-300">Mover</button>
+                        </div>
+                    </div>
+                    <div id="leitos-feedback" class="mt-4 p-3 rounded-lg text-sm font-medium text-center hidden"></div>
+                </div>
+                <div class="bg-gray-50 p-6 sm:p-8 rounded-xl shadow-md">
+                    ${leitosHtml}
+                </div>
+            `;
+        }
+
+        function moverPaciente() {
+            const pacienteId = document.getElementById('paciente-selecionado').value;
+            const leitoIdDestino = document.getElementById('leito-destino').value;
+            const feedbackDiv = document.getElementById('leitos-feedback');
+
+            if (!pacienteId || !leitoIdDestino) {
+                feedbackDiv.textContent = 'Por favor, selecione um paciente e um leito de destino.';
+                feedbackDiv.className = 'mt-4 p-3 rounded-lg bg-red-100 text-red-800 text-sm font-medium text-center';
+                feedbackDiv.classList.remove('hidden');
+                return;
+            }
+
+            const paciente = mockPatients.find(p => p.id === pacienteId);
+            const leitoDestino = mockBeds.find(b => b.id === leitoIdDestino);
+            const leitoAtual = mockBeds.find(b => b.paciente === pacienteId);
+
+            if (leitoDestino.status !== 'Livre') {
+                feedbackDiv.textContent = 'O leito de destino já está ocupado ou em manutenção.';
+                feedbackDiv.className = 'mt-4 p-3 rounded-lg bg-red-100 text-red-800 text-sm font-medium text-center';
+                feedbackDiv.classList.remove('hidden');
+                return;
+            }
+
+            // Libera o leito atual do paciente, se houver
+            if (leitoAtual) {
+                leitoAtual.status = 'Livre';
+                leitoAtual.paciente = null;
+            }
+
+            // Ocupa o novo leito
+            leitoDestino.status = 'Ocupado';
+            leitoDestino.paciente = pacienteId;
+            paciente.leitoId = leitoIdDestino;
+
+            feedbackDiv.textContent = `Paciente ${paciente.nome} movido com sucesso para o leito ${leitoDestino.id}.`;
+            feedbackDiv.className = 'mt-4 p-3 rounded-lg bg-green-100 text-green-800 text-sm font-medium text-center';
+            feedbackDiv.classList.remove('hidden');
+            
+            showSection('leitos');
+        }
+
+        // Renderiza a seção de censo diário (Mantida)
+        function renderCensus() {
+            const admittedPatients = mockPatients.filter(p => p.status === 'Admitido');
+            const highPatients = mockPatients.filter(p => p.status === 'Alta');
+            const deathPatients = mockPatients.filter(p => p.status === 'Obito');
+            const evadedPatients = mockPatients.filter(p => p.status === 'Evasao');
+            
+            const admittedCount = admittedPatients.length;
+            const highCount = highPatients.length;
+            const deathCount = deathPatients.length;
+            const evadedCount = evadedPatients.length;
+
+            const renderPatientList = (patients, statusKey) => {
+                if (patients.length === 0) {
+                    return `<p class="text-sm text-gray-500">Nenhum registro.</p>`;
+                }
+                return `
+                    <ul class="space-y-2">
+                        ${patients.map(p => `
+                            <li class="p-2 bg-white rounded-md shadow-sm border border-gray-200 text-sm">
+                                <strong>${p.nome}</strong><br>
+                                <span class="text-xs text-gray-600">${statusKey}: ${p[statusKey.toLowerCase().replace(' ', '_')]}</span>
+                            </li>
+                        `).join('')}
+                    </ul>
+                `;
+            };
+
+            return `
+                <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-gray-800">Censo Diário Hospitalar</h2>
+                <div class="bg-white p-6 sm:p-8 rounded-xl shadow-md mb-6">
+                    <h3 class="text-xl font-semibold mb-4 text-teal-600">Pesquisar Censo Histórico</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="col-span-1">
+                            <label for="censo-data" class="block text-sm font-medium text-gray-700">Data:</label>
+                            <input type="date" id="censo-data" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-teal-500 focus:border-teal-500">
+                        </div>
+                        <div class="col-span-1">
+                            <label for="censo-hora" class="block text-sm font-medium text-gray-700">Hora:</label>
+                            <input type="time" id="censo-hora" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-teal-500 focus:border-teal-500">
+                        </div>
+                        <div class="col-span-1 flex items-end">
+                            <button onclick="searchCensus()" class="w-full bg-teal-500 text-white py-2 rounded-md font-semibold hover:bg-teal-600 transition-colors duration-300">Buscar Censo</button>
+                        </div>
+                    </div>
+                    <div id="censo-feedback" class="mt-4 p-3 rounded-lg text-sm font-medium text-center hidden"></div>
+                </div>
+
+                <div id="censo-resultado" class="bg-gray-50 p-6 sm:p-8 rounded-xl shadow-md">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800">Censo Atual</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="p-4 bg-gray-100 rounded-lg shadow-sm text-center">
+                            <h4 class="text-sm font-bold text-gray-600">Total de Leitos</h4>
+                            <p class="text-2xl font-bold text-teal-600">${mockBeds.length}</p>
+                        </div>
+                        <div class="p-4 bg-gray-100 rounded-lg shadow-sm text-center">
+                            <h4 class="text-sm font-bold text-gray-600">Leitos Ocupados</h4>
+                            <p class="text-2xl font-bold text-red-500">${mockBeds.filter(b => b.status === 'Ocupado').length}</p>
+                        </div>
+                        <div class="p-4 bg-gray-100 rounded-lg shadow-sm text-center">
+                            <h4 class="text-sm font-bold text-gray-600">Leitos Livres</h4>
+                            <p class="text-2xl font-bold text-green-500">${mockBeds.filter(b => b.status === 'Livre').length}</p>
+                        </div>
+                         <div class="p-4 bg-gray-100 rounded-lg shadow-sm text-center">
+                            <h4 class="text-sm font-bold text-gray-600">Em Manutenção</h4>
+                            <p class="text-2xl font-bold text-yellow-500">${mockBeds.filter(b => b.status === 'Manutenção').length}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="p-4 border border-gray-200 rounded-xl">
+                            <h4 class="text-lg font-semibold mb-2 text-teal-700">Admitidos (${admittedCount})</h4>
+                            ${renderPatientList(admittedPatients, 'Admissão')}
+                        </div>
+                        <div class="p-4 border border-gray-200 rounded-xl">
+                            <h4 class="text-lg font-semibold mb-2 text-green-700">Com Alta (${highCount})</h4>
+                            ${renderPatientList(highPatients, 'Alta')}
+                        </div>
+                        <div class="p-4 border border-gray-200 rounded-xl">
+                            <h4 class="text-lg font-semibold mb-2 text-red-700">Óbito (${deathCount})</h4>
+                            ${renderPatientList(deathPatients, 'Óbito')}
+                        </div>
+                        <div class="p-4 border border-gray-200 rounded-xl">
+                            <h4 class="text-lg font-semibold mb-2 text-orange-700">Evasão (${evadedCount})</h4>
+                            ${renderPatientList(evadedPatients, 'Evasão')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Lógica de busca do censo (Mantida)
+        function searchCensus() {
+            const data = document.getElementById('censo-data').value;
+            const hora = document.getElementById('censo-hora').value;
+            const feedbackDiv = document.getElementById('censo-feedback');
+            const resultadoDiv = document.getElementById('censo-resultado');
+            
+            if (!data || !hora) {
+                feedbackDiv.textContent = 'Por favor, insira uma data e hora para a pesquisa.';
+                feedbackDiv.className = 'mt-4 p-3 rounded-lg bg-red-100 text-red-800 text-sm font-medium text-center';
+                feedbackDiv.classList.remove('hidden');
+                return;
+            }
+
+            const censoEncontrado = mockCensusData.find(c => c.data === data && c.hora === hora);
+            
+            if (censoEncontrado) {
+                resultadoDiv.innerHTML = `
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800">Dados do Censo Histórico (${data} - ${hora})</h3>
+                    <p class="text-gray-600 mb-4"><strong>Nota:</strong> Este é um censo histórico com dados simplificados. Nomes de pacientes não estão disponíveis nesta visualização.</p>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="p-4 bg-gray-100 rounded-lg shadow-sm text-center">
+                            <h4 class="text-sm font-bold text-gray-600">Total de Pacientes</h4>
+                            <p class="text-2xl font-bold text-teal-600">${censoEncontrado.totalPacientes}</p>
+                        </div>
+                        <div class="p-4 bg-gray-100 rounded-lg shadow-sm text-center">
+                            <h4 class="text-sm font-bold text-gray-600">Admitidos</h4>
+                            <p class="text-2xl font-bold text-teal-600">${censoEncontrado.admitidos}</p>
+                        </div>
+                        <div class="p-4 bg-gray-100 rounded-lg shadow-sm text-center">
+                            <h4 class="text-sm font-bold text-gray-600">Com Alta</h4>
+                            <p class="text-2xl font-bold text-green-500">${censoEncontrado.alta}</p>
+                        </div>
+                        <div class="p-4 bg-gray-100 rounded-lg shadow-sm text-center">
+                            <h4 class="text-sm font-bold text-gray-600">Óbito</h4>
+                            <p class="text-2xl font-bold text-red-500">${censoEncontrado.obito}</p>
+                        </div>
+                        <div class="p-4 bg-gray-100 rounded-lg shadow-sm text-center">
+                            <h4 class="text-sm font-bold text-gray-600">Evasão</h4>
+                            <p class="text-2xl font-bold text-orange-500">${censoEncontrado.evasao}</p>
+                        </div>
+                    </div>
+                `;
+                feedbackDiv.textContent = `Censo encontrado para a data e hora informadas.`;
+                feedbackDiv.className = 'mt-4 p-3 rounded-lg bg-green-100 text-green-800 text-sm font-medium text-center';
+            } else {
+                resultadoDiv.innerHTML = `
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800">Nenhum dado encontrado</h3>
+                    <p class="text-center text-gray-500">Nenhum censo diário encontrado para a data e hora especificadas.</p>
+                `;
+                feedbackDiv.textContent = `Nenhum censo encontrado para a data e hora informadas.`;
+                feedbackDiv.className = 'mt-4 p-3 rounded-lg bg-red-100 text-red-800 text-sm font-medium text-center';
+            }
+            feedbackDiv.classList.remove('hidden');
+        }
+
+        // --- Gestão de Farmácia (Atualizada com Estoque) ---
+        
+        function setFarmaciaView(view) {
+            farmaciaView = view;
+            showSection('farmacia'); // Força a renderização da seção Farmácia
+        }
+
+        function getInventoryStatusClass(current, min) {
+            if (current <= min) {
+                return 'bg-red-500'; // Estoque Crítico
+            }
+            if (current <= min * 1.5) {
+                return 'bg-yellow-500'; // Estoque Baixo
+            }
+            return 'bg-green-500'; // Estoque Normal
+        }
+
+        function getInventoryStatusText(current, min) {
+            if (current <= min) {
+                return 'Crítico';
+            }
+            if (current <= min * 1.5) {
+                return 'Baixo';
+            }
+            return 'Normal';
+        }
+
+        function renderPedidos() {
+            const pendingOrders = mockPharmacyOrders.filter(o => o.status === 'Pendente' || o.status === 'Em Preparação');
+            const completedOrders = mockPharmacyOrders.filter(o => o.status === 'Entregue');
+
+            return `
+                <div class="p-6 sm:p-8 rounded-xl shadow-md bg-white mb-6">
+                    <h3 class="text-xl font-semibold mb-4 text-teal-600">Novo Pedido</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                        <input type="text" id="pedido-paciente" placeholder="Nome do Paciente" class="p-2 rounded-md border-gray-300 shadow-sm focus:ring-teal-500 focus:border-teal-500">
+                        <input type="text" id="pedido-medicamento" placeholder="Medicamento/Insumo" class="p-2 rounded-md border-gray-300 shadow-sm focus:ring-teal-500 focus:border-teal-500">
+                        <input type="text" id="pedido-dosagem" placeholder="Dosagem (ex: 50mg ou N/A)" class="p-2 rounded-md border-gray-300 shadow-sm focus:ring-teal-500 focus:border-teal-500">
+                        <input type="number" id="pedido-quantidade" placeholder="Quantidade" class="p-2 rounded-md border-gray-300 shadow-sm focus:ring-teal-500 focus:border-teal-500">
+                        <button onclick="adicionarPedidoFarmacia()" class="col-span-1 sm:col-span-2 md:col-span-3 bg-teal-500 text-white py-2 rounded-md font-semibold hover:bg-teal-600 transition-colors duration-300">Criar Pedido</button>
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 p-6 sm:p-8 rounded-xl shadow-md mb-6">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800">Pedidos Pendentes</h3>
+                    <div class="space-y-4">
+                        ${pendingOrders.length > 0 ? pendingOrders.map(order => `
+                            <div class="p-4 border border-gray-200 rounded-lg bg-white shadow-sm">
+                                <h4 class="font-bold text-teal-700">${order.medicamento}</h4>
+                                <p class="text-sm text-gray-600">Paciente: ${order.paciente} | Dosagem: ${order.dosagem} | Qtd: ${order.quantidade}</p>
+                                <p class="text-xs text-gray-500 mt-1">Status: <span class="${order.status === 'Pendente' ? 'text-red-500' : 'text-yellow-500'} font-semibold">${order.status}</span> | Pedido em: ${order.data_pedido}</p>
+                                <div class="mt-2 space-x-2">
+                                    <button onclick="updateOrderStatus('${order.id}', 'Em Preparação')" class="text-xs text-white bg-yellow-500 px-3 py-1 rounded-full hover:bg-yellow-600">Marcar Em Preparação</button>
+                                    <button onclick="updateOrderStatus('${order.id}', 'Entregue')" class="text-xs text-white bg-green-500 px-3 py-1 rounded-full hover:bg-green-600">Marcar Entregue</button>
+                                </div>
+                            </div>
+                        `).join('') : '<p class="text-center text-gray-500">Nenhum pedido pendente.</p>'}
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 p-6 sm:p-8 rounded-xl shadow-md">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800">Pedidos Concluídos</h3>
+                    <div class="space-y-4">
+                        ${completedOrders.length > 0 ? completedOrders.map(order => `
+                            <div class="p-4 border border-gray-200 rounded-lg bg-white shadow-sm">
+                                <h4 class="font-bold text-gray-700">${order.medicamento}</h4>
+                                <p class="text-sm text-gray-600">Paciente: ${order.paciente} | Dosagem: ${order.dosagem} | Qtd: ${order.quantidade}</p>
+                                <p class="text-xs text-gray-500 mt-1">Status: <span class="text-green-500 font-semibold">${order.status}</span> | Pedido em: ${order.data_pedido}</p>
+                            </div>
+                        `).join('') : '<p class="text-center text-gray-500">Nenhum pedido concluído.</p>'}
+                    </div>
+                </div>
+            `;
+        }
+        
+        function renderEstoque() {
+            let inventoryRows = mockInventory.map(item => {
+                const statusClass = getInventoryStatusClass(item.quantidade, item.limite_minimo);
+                const statusText = getInventoryStatusText(item.quantidade, item.limite_minimo);
+
+                return `
+                    <tr class="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                        <td class="px-4 py-3 text-sm font-medium text-gray-900">${item.nome}</td>
+                        <td class="px-4 py-3 text-sm text-gray-700">${item.tipo}</td>
+                        <td class="px-4 py-3 text-sm text-gray-700">${item.quantidade}</td>
+                        <td class="px-4 py-3 text-sm text-gray-700">${item.limite_minimo}</td>
+                        <td class="px-4 py-3 text-sm text-gray-700">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${statusClass} text-white">
+                                ${statusText}
+                            </span>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            return `
+                <div class="bg-white p-6 sm:p-8 rounded-xl shadow-md mb-6">
+                    <h3 class="text-xl font-semibold mb-4 text-teal-600">Cadastro de Novo Item</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                        <input type="text" id="estoque-nome" placeholder="Nome do Item (ex: Seringa 10ml)" class="col-span-1 p-2 rounded-md border-gray-300 shadow-sm focus:ring-teal-500 focus:border-teal-500">
+                        <select type="text" id="estoque-tipo" class="col-span-1 p-2 rounded-md border-gray-300 shadow-sm focus:ring-teal-500 focus:border-teal-500">
+                            <option value="Medicamento">Medicamento</option>
+                            <option value="Insumo">Insumo</option>
+                        </select>
+                        <input type="number" id="estoque-quantidade" placeholder="Qtd Inicial" class="col-span-1 p-2 rounded-md border-gray-300 shadow-sm focus:ring-teal-500 focus:border-teal-500">
+                        <input type="number" id="estoque-minimo" placeholder="Qtd Mínima" class="col-span-1 p-2 rounded-md border-gray-300 shadow-sm focus:ring-teal-500 focus:border-teal-500">
+                        <button onclick="adicionarItemEstoque()" class="col-span-1 sm:col-span-4 bg-teal-500 text-white py-2 rounded-md font-semibold hover:bg-teal-600 transition-colors duration-300">Adicionar ao Estoque</button>
+                    </div>
+                    <div id="estoque-feedback" class="mt-4 p-3 rounded-lg text-sm font-medium text-center hidden"></div>
+                </div>
+
+                <div class="bg-gray-50 p-6 sm:p-8 rounded-xl shadow-md">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800">Visualização de Estoque Geral</h3>
+                    <p class="text-gray-600 mb-4">Itens em estoque. Estoque Crítico (<span class="text-red-500 font-bold">Vermelho</span>), Estoque Baixo (<span class="text-yellow-500 font-bold">Amarelo</span>).</p>
+                    <div class="overflow-x-auto rounded-lg border border-gray-200">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-100">
+                                <tr>
+                                    <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Item</th>
+                                    <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Tipo</th>
+                                    <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Qtd Atual</th>
+                                    <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Qtd Mínima</th>
+                                    <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                ${inventoryRows}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderFarmacia() {
+            const isPedidos = farmaciaView === 'pedidos';
+            const activeClass = 'bg-teal-600 text-white shadow-md';
+            const inactiveClass = 'bg-gray-300 text-gray-700 hover:bg-gray-400';
+
+            let content = isPedidos ? renderPedidos() : renderEstoque();
+
+            return `
+                <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-gray-800">Gestão de Farmácia</h2>
+
+                <div class="flex mb-4">
+                    <button onclick="setFarmaciaView('pedidos')" class="px-6 py-2 rounded-l-lg font-semibold transition-colors duration-200 ${isPedidos ? activeClass : inactiveClass}">
+                        Pedidos de Medicamentos
+                    </button>
+                    <button onclick="setFarmaciaView('estoque')" class="px-6 py-2 rounded-r-lg font-semibold transition-colors duration-200 ${!isPedidos ? activeClass : inactiveClass}">
+                        Estoque e Insumos
+                    </button>
+                </div>
+                
+                ${content}
+            `;
+        }
+        
+        function adicionarItemEstoque() {
+            const nome = document.getElementById('estoque-nome').value;
+            const tipo = document.getElementById('estoque-tipo').value;
+            const quantidade = parseInt(document.getElementById('estoque-quantidade').value);
+            const limite_minimo = parseInt(document.getElementById('estoque-minimo').value);
+            const feedbackDiv = document.getElementById('estoque-feedback');
+
+            if (nome && tipo && !isNaN(quantidade) && !isNaN(limite_minimo) && quantidade >= 0 && limite_minimo >= 0) {
+                mockInventory.push({ nome, tipo, quantidade, limite_minimo });
+
+                document.getElementById('estoque-nome').value = '';
+                document.getElementById('estoque-quantidade').value = '';
+                document.getElementById('estoque-minimo').value = '';
+                
+                feedbackDiv.textContent = `Item '${nome}' adicionado ao estoque com sucesso.`;
+                feedbackDiv.className = 'mt-4 p-3 rounded-lg bg-green-100 text-green-800 text-sm font-medium text-center';
+                feedbackDiv.classList.remove('hidden');
+
+                setFarmaciaView('estoque');
+            } else {
+                feedbackDiv.textContent = 'Por favor, preencha todos os campos com valores válidos.';
+                feedbackDiv.className = 'mt-4 p-3 rounded-lg bg-red-100 text-red-800 text-sm font-medium text-center';
+                feedbackDiv.classList.remove('hidden');
+            }
+        }
+
+        function adicionarPedidoFarmacia() {
+            const paciente = document.getElementById('pedido-paciente').value;
+            const medicamento = document.getElementById('pedido-medicamento').value;
+            const dosagem = document.getElementById('pedido-dosagem').value;
+            const quantidade = document.getElementById('pedido-quantidade').value;
+
+            if (paciente && medicamento && dosagem && quantidade) {
+                const novoId = 'ORD-' + (mockPharmacyOrders.length + 1).toString().padStart(3, '0');
+                const dataPedido = new Date().toLocaleString();
+                mockPharmacyOrders.push({
+                    id: novoId,
+                    paciente,
+                    medicamento,
+                    dosagem,
+                    quantidade,
+                    status: 'Pendente',
+                    data_pedido: dataPedido
+                });
+                document.getElementById('pedido-paciente').value = '';
+                document.getElementById('pedido-medicamento').value = '';
+                document.getElementById('pedido-dosagem').value = '';
+                document.getElementById('pedido-quantidade').value = '';
+                showSection('farmacia');
+            } else {
+                alert('Por favor, preencha todos os campos do pedido.');
+            }
+        }
+        
+        function updateOrderStatus(id, newStatus) {
+            const order = mockPharmacyOrders.find(o => o.id === id);
+            if (order) {
+                order.status = newStatus;
+                showSection('farmacia');
+            }
+        }
+
+        // Renderiza a nova seção de Vigilância em Saúde (ATUALIZADA)
+        function renderVigilancia() {
+            const admittedPatients = mockPatients.filter(p => p.status === 'Admitido').length;
+            const dischargedPatients = mockPatients.filter(p => p.status === 'Alta').length;
+            const deceasedPatients = mockPatients.filter(p => p.status === 'Obito').length;
+            const evadedPatients = mockPatients.filter(p => p.status === 'Evasao').length;
+            const total = admittedPatients + dischargedPatients + deceasedPatients + evadedPatients;
+
+            // Novo bloco para CCIH/CME
+            const ccihHtml = `
+                <div class="bg-white p-6 sm:p-8 rounded-xl shadow-md mb-6 border-l-4 border-red-600">
+                    <h3 class="text-xl font-semibold mb-4 text-red-700 flex items-center">
+                        Controle de Infecção Hospitalar (CCIH) e Sepse
+                    </h3>
+                    <p class="text-gray-600 mb-4">Monitoramento de indicadores chave para o controle de infecções relacionadas à assistência à saúde (IRAS), essenciais no controle de Sepse.</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <!-- CRBSI (Taxa de Sepse Relacionada a Cateter) -->
+                        <div class="p-4 border rounded-lg shadow-sm ${mockCCIHData.crbsi.lastMonth > mockCCIHData.crbsi.target ? 'border-red-400 bg-red-50' : 'border-green-400 bg-green-50'}">
+                            <h4 class="text-lg font-bold">Taxa de CRBSI (Sepse)</h4>
+                            <p class="text-3xl font-extrabold mt-1">${mockCCIHData.crbsi.lastMonth.toFixed(1)} <span class="text-base font-normal">/1000 cateteres/dia</span></p>
+                            <p class="text-sm ${mockCCIHData.crbsi.lastMonth > mockCCIHData.crbsi.target ? 'text-red-700 font-semibold' : 'text-green-700 font-semibold'}">Meta: ${mockCCIHData.crbsi.target.toFixed(1)} | ${mockCCIHData.crbsi.lastMonth > mockCCIHData.crbsi.target ? '⚠️ ACIMA DA META' : '✅ DENTRO DA META'}</p>
+                            <p class="text-xs text-gray-500 mt-1">Últimos casos confirmados: ${mockCCIHData.crbsi.cases}</p>
+                        </div>
+
+                        <!-- PAV (Pneumonia Associada à Ventilação) -->
+                        <div class="p-4 border rounded-lg shadow-sm ${mockCCIHData.pavi.lastMonth > mockCCIHData.pavi.target ? 'border-red-400 bg-red-50' : 'border-green-400 bg-green-50'}">
+                            <h4 class="text-lg font-bold">Densidade de Incidência de PAV</h4>
+                            <p class="text-3xl font-extrabold mt-1">${mockCCIHData.pavi.lastMonth.toFixed(1)} <span class="text-base font-normal">/1000 ventiladores/dia</span></p>
+                            <p class="text-sm ${mockCCIHData.pavi.lastMonth > mockCCIHData.pavi.target ? 'text-red-700 font-semibold' : 'text-green-700 font-semibold'}">Meta: ${mockCCIHData.pavi.target.toFixed(1)} | ${mockCCIHData.pavi.lastMonth > mockCCIHData.pavi.target ? '⚠️ ACIMA DA META' : '✅ DENTRO DA META'}</p>
+                            <p class="text-xs text-gray-500 mt-1">Últimos casos confirmados: ${mockCCIHData.pavi.cases}</p>
+                        </div>
+                    </div>
+
+                    <h4 class="text-lg font-bold mt-6 mb-3 text-gray-800">CME - Controle de Esterilização</h4>
+                    <div class="overflow-x-auto rounded-lg border border-gray-200">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-100">
+                                <tr>
+                                    <th class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Material</th>
+                                    <th class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Último Ciclo</th>
+                                    <th class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Status (Indicadores)</th>
+                                    <th class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Data/Hora</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                ${mockCMEData.map(item => `
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-4 py-3 text-sm font-medium text-gray-900">${item.item}</td>
+                                        <td class="px-4 py-3 text-sm text-gray-700">${item.ciclo}</td>
+                                        <td class="px-4 py-3 text-sm">
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${item.alert} text-white">
+                                                ${item.status}
+                                            </span>
+                                        </td>
+                                        <td class="px-4 py-3 text-sm text-gray-500">${item.date}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+
+
+            return `
+                <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-gray-800">Vigilância em Saúde</h2>
+                
+                ${ccihHtml}
+
+                <!-- Diagrama de Controle de Casos Notificados -->
+                <div class="bg-gray-50 p-6 sm:p-8 rounded-xl shadow-md mb-6">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800">Diagrama de Controle de Casos Notificados</h3>
+                    <p class="text-gray-600 mb-6">Este diagrama ajuda a monitorar a variação no número de casos ao longo do tempo, identificando desvios que merecem investigação.</p>
+                    <div class="overflow-x-auto w-full">
+                        <canvas id="controlChart" class="w-full h-80"></canvas>
+                        <div class="flex justify-center items-center mt-4 text-sm font-medium space-x-4">
+                            <span class="flex items-center"><span class="w-3 h-3 rounded-full bg-blue-500 mr-1"></span> Notificados</span>
+                            <span class="flex items-center"><span class="w-3 h-3 rounded-full bg-green-500 mr-1"></span> Confirmados</span>
+                            <span class="flex items-center"><span class="w-3 h-3 rounded-full bg-orange-500 mr-1"></span> Descartados</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dados de Vigilância Epidemiológica -->
+                <div class="bg-white p-6 sm:p-8 rounded-xl shadow-md mb-6">
+                    <h3 class="text-xl font-semibold mb-4 text-teal-600">Vigilância Epidemiológica Geral</h3>
+                    <p class="text-gray-600 mb-4">Casos notificados de doenças compulsórias ou de interesse epidemiológico.</p>
+                    <div class="overflow-x-auto rounded-lg border border-gray-200">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-100">
+                                <tr>
+                                    <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">ID</th>
+                                    <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Paciente</th>
+                                    <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Doença</th>
+                                    <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Data Notificação</th>
+                                    <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                ${mockSurveillanceCases.map(caso => `
+                                    <tr class="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                                        <td class="px-4 py-3 text-sm font-medium text-gray-900">${caso.id}</td>
+                                        <td class="px-4 py-3 text-sm text-gray-700">${caso.paciente}</td>
+                                        <td class="px-4 py-3 text-sm text-gray-700">${caso.doenca}</td>
+                                        <td class="px-4 py-3 text-sm text-gray-700">${caso.data_notificacao}</td>
+                                        <td class="px-4 py-3 text-sm text-gray-700">${caso.status_investigacao}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Dados de Assistência e Censo -->
+                <div class="bg-gray-50 p-6 sm:p-8 rounded-xl shadow-md">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800">Monitoramento da Assistência</h3>
+                    <p class="text-gray-600 mb-6">Métricas de ocupação e movimentação de pacientes que influenciam a vigilância.</p>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="p-4 bg-gray-100 rounded-lg shadow-sm text-center">
+                            <h4 class="text-sm font-bold text-gray-600">Total de Pacientes</h4>
+                            <p class="text-2xl font-bold text-teal-600">${total}</p>
+                        </div>
+                        <div class="p-4 bg-gray-100 rounded-lg shadow-sm text-center">
+                            <h4 class="text-sm font-bold text-gray-600">Admitidos</h4>
+                            <p class="text-2xl font-bold text-teal-600">${admittedPatients}</p>
+                        </div>
+                        <div class="p-4 bg-gray-100 rounded-lg shadow-sm text-center">
+                            <h4 class="text-sm font-bold text-gray-600">Com Alta</h4>
+                            <p class="text-2xl font-bold text-green-500">${dischargedPatients}</p>
+                        </div>
+                        <div class="p-4 bg-gray-100 rounded-lg shadow-sm text-center">
+                            <h4 class="text-sm font-bold text-gray-600">Óbito</h4>
+                            <p class="text-2xl font-bold text-red-500">${deceasedPatients}</p>
+                        </div>
+                         <div class="p-4 bg-gray-100 rounded-lg shadow-sm text-center">
+                            <h4 class="text-sm font-bold text-gray-600">Evasão</h4>
+                            <p class="text-2xl font-bold text-orange-500">${evadedPatients}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function drawControlChart(canvasId, data) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            
+            const parent = canvas.parentElement;
+            const width = parent.offsetWidth;
+            const height = 400; 
+            canvas.width = width;
+            canvas.height = height;
+
+            const margin = { top: 50, right: 80, bottom: 50, left: 50 };
+            const chartWidth = width - margin.left - margin.right;
+            const chartHeight = height - margin.top - margin.bottom;
+            ctx.font = '12px Inter, sans-serif';
+
+            const cases = ['notified', 'confirmed', 'discarded'];
+            const colors = {
+                notified: '#2563eb', // Azul
+                confirmed: '#16a34a', // Verde
+                discarded: '#ea580c' // Laranja
+            };
+
+            // Calcular estatísticas para cada tipo de caso
+            const stats = {};
+            cases.forEach(c => {
+                const values = data.map(d => d[c]);
+                const sum = values.reduce((a, b) => a + b, 0);
+                const average = sum / values.length;
+                const stdDev = Math.sqrt(values.map(v => Math.pow(v - average, 2)).reduce((a, b) => a + b, 0) / (values.length - 1));
+                const ucl = average + (3 * stdDev);
+                const lcl = average - (3 * stdDev);
+                stats[c] = { values, average, stdDev, ucl, lcl };
+            });
+
+            // Encontrar o valor máximo e mínimo geral para a escala Y
+            const allValues = data.flatMap(d => cases.map(c => d[c]));
+            const maxVal = Math.max(...allValues, ...cases.map(c => stats[c].ucl));
+            const minVal = Math.min(...allValues, ...cases.map(c => stats[c].lcl));
+            const valueRange = maxVal - minVal;
+            const yScale = (chartHeight) / (valueRange * 1.2);
+            const yOffset = maxVal + (valueRange * 0.1);
+
+            const getX = (index) => margin.left + (index / (data.length - 1)) * chartWidth;
+            const getY = (value) => margin.top + (yOffset - value) * yScale;
+
+            // Limpar canvas
+            ctx.clearRect(0, 0, width, height);
+
+            // Desenhar eixos
+            ctx.beginPath();
+            ctx.moveTo(margin.left, margin.top);
+            ctx.lineTo(margin.left, height - margin.bottom);
+            ctx.lineTo(width - margin.right, height - margin.bottom);
+            ctx.strokeStyle = '#6b7280';
+            ctx.stroke();
+
+            // Desenhar linhas de controle e dados para cada categoria
+            cases.forEach(c => {
+                const { values, average, ucl, lcl } = stats[c];
+
+                // Desenhar linha central (CL)
+                ctx.beginPath();
+                ctx.strokeStyle = colors[c];
+                ctx.lineWidth = 2;
+                ctx.setLineDash([5, 5]);
+                ctx.moveTo(margin.left, getY(average));
+                ctx.lineTo(width - margin.right, getY(average));
+                ctx.stroke();
+                ctx.setLineDash([]);
+
+                // Desenhar limites de controle (UCL e LCL)
+                ctx.beginPath();
+                ctx.strokeStyle = colors[c];
+                ctx.lineWidth = 1.5;
+                ctx.moveTo(margin.left, getY(ucl));
+                ctx.lineTo(width - margin.right, getY(ucl));
+                ctx.stroke();
+                
+                ctx.beginPath();
+                ctx.moveTo(margin.left, getY(lcl));
+                ctx.lineTo(width - margin.right, getY(lcl));
+                ctx.stroke();
+                
+                // Desenhar a linha de dados e os pontos
+                ctx.beginPath();
+                ctx.strokeStyle = colors[c];
+                ctx.lineWidth = 2;
+                values.forEach((value, i) => {
+                    const x = getX(i);
+                    const y = getY(value);
+                    if (i === 0) {
+                        ctx.moveTo(x, y);
+                    } else {
+                        ctx.lineTo(x, y);
+                    }
+                    // Desenhar ponto
+                    ctx.beginPath();
+                    ctx.fillStyle = colors[c];
+                    ctx.arc(x, y, 4, 0, 2 * Math.PI);
+                    ctx.fill();
+                });
+                ctx.stroke();
+
+                // Adicionar rótulos de valores nos pontos
+                ctx.fillStyle = colors[c];
+                values.forEach((value, i) => {
+                    const x = getX(i);
+                    const y = getY(value);
+                    ctx.fillText(value, x + 5, y - 5);
+                });
+            });
+
+            // Desenhar rótulos dos eixos
+            ctx.fillStyle = '#6b7280';
+            const dates = data.map(d => d.date.substring(5)); // Mês-Dia
+            dates.forEach((date, i) => {
+                const x = getX(i);
+                ctx.fillText(date, x, height - margin.bottom + 15);
+            });
+            ctx.fillText('Casos', 10, margin.top - 10);
+        }
+
+        // --- Funções LLM e Assistência (Mantidas) ---
+
+        async function makeGeminiCall(payload) {
+            const apiKey = "";
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+            const maxRetries = 5;
+            let delay = 1000;
+
+            for (let i = 0; i < maxRetries; i++) {
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (response.status === 429) {
+                        await new Promise(resolve => setTimeout(resolve, delay));
+                        delay *= 2;
+                        continue;
+                    }
+
+                    if (!response.ok) {
+                        throw new Error(`API call failed with status: ${response.status}`);
+                    }
+
+                    const result = await response.json();
+                    const text = result.candidates?.[0]?.content?.parts?.[0]?.text || "Erro: Conteúdo não gerado.";
+                    return text;
+
+                } catch (error) {
+                    console.error("Gemini API Error:", error);
+                    if (i === maxRetries - 1) throw error;
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                    delay *= 2;
+                }
+            }
+        }
+
+        function formatMarkdown(markdownText) {
+            if (!markdownText) return '';
+            let html = markdownText;
+            // Headers
+            html = html.replace(/^### (.*$)/gim, '<strong>$1</strong>');
+            html = html.replace(/^## (.*$)/gim, '<strong>$1</strong>');
+            html = html.replace(/^# (.*$)/gim, '<strong>$1</strong>');
+            // Bold (**text** or __text__)
+            html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            html = html.replace(/__(.*?)__/g, '<strong>$1</strong>');
+            // Lists
+            html = html.replace(/\* (.*)/g, '<li>$1</li>');
+            html = html.replace(/- (.*)/g, '<li>$1</li>');
+            if (html.includes('<li>')) {
+                html = '<ul>' + html + '</ul>';
+                html = html.replace('</ul>\n<ul>', '');
+            }
+            // New lines to paragraphs
+            html = html.replace(/\n\n/g, '</p><p>');
+            html = html.replace(/\n/g, '<br>');
+            html = '<p>' + html + '</p>';
+            return html;
+        }
+
+        async function generateCarePlan(pacienteId) {
+            const outputDiv = document.getElementById('care-plan-output');
+            const patient = mockPatients.find(p => p.id === pacienteId);
+
+            if (!patient) {
+                outputDiv.innerHTML = '<p class="text-red-600">Erro: Paciente não encontrado.</p>';
+                return;
+            }
+
+            // Loading indicator
+            outputDiv.innerHTML = '<div class="flex items-center justify-center text-teal-600 p-4"><svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-teal-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>Gerando Plano de Cuidados...</div>';
+
+            const evolutionsText = patient.evolucao.map(e => {
+                if (e.tipo === 'evolucao') return `Evolução (${e.data}): ${e.texto}`;
+                if (e.tipo === 'lesao_por_pressao') return `Lesão por Pressão (${e.data}): Local ${e.localizacao}, Estágio ${e.estagio}`;
+            }).join('; ');
+
+            const systemPrompt = "Você é um especialista em planejamento de cuidados de enfermagem e fisioterapia. Sua tarefa é criar um rascunho de Plano de Cuidados para um paciente hospitalizado, com foco nos problemas de saúde prioritários. Retorne um Plano de Cuidados conciso e em português. Formate o plano usando Markdown com títulos em negrito (use **) para: Diagnóstico de Enfermagem, Metas e Intervenções (Enfermagem e Fisioterapia). O plano deve ser baseado no motivo da admissão fornecido e nas evoluções recentes, se houver.";
+            
+            const userQuery = `Elabore um Plano de Cuidados para o paciente ${patient.nome}. Motivo da Admissão: ${patient.motivo}. ${evolutionsText ? 'Evoluções e achados recentes: ' + evolutionsText : 'Nenhuma evolução ou achado recente registrado.'}`;
+
+            const payload = {
+                contents: [{ parts: [{ text: userQuery }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] },
+            };
+
+            try {
+                const responseText = await makeGeminiCall(payload);
+                outputDiv.innerHTML = `<div class="bg-teal-50 p-4 rounded-lg border border-teal-200">
+                    <h4 class="text-lg font-bold text-teal-700 mb-2">Plano de Cuidados ✨ Gerado:</h4>
+                    <div class="prose max-w-none text-sm text-gray-700 mt-2">${formatMarkdown(responseText)}</div>
+                </div>`;
+            } catch (error) {
+                outputDiv.innerHTML = '<p class="text-red-600 p-4">Falha ao gerar o Plano de Cuidados. Verifique o console para detalhes da API e tente novamente mais tarde.</p>';
+            }
+        }
+
+        // Renderiza a nova seção de Assistência (Mantida)
+        function renderAssistencia() {
+            const pacientesAdmitidos = mockPatients.filter(p => p.status === 'Admitido' && p.leitoId);
+
+            return `
+                <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-gray-800">Assistência ao Paciente</h2>
+                
+                <div class="p-6 sm:p-8 rounded-xl shadow-md bg-white mb-6">
+                    <h3 class="text-xl font-semibold mb-4 text-teal-600">Evolução do Paciente</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="md:col-span-1">
+                            <label for="paciente-evolucao" class="block text-sm font-medium text-gray-700">Selecione o Paciente:</label>
+                            <select id="paciente-evolucao" onchange="showPatientEvolution()" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-teal-500 focus:border-teal-500">
+                                <option value="">--- Selecione ---</option>
+                                ${pacientesAdmitidos.map(p => `<option value="${p.id}">${p.nome} (${p.id})</option>`).join('')}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="evolucao-content" class="bg-gray-50 p-6 sm:p-8 rounded-xl shadow-md hidden">
+                    <!-- Conteúdo de evolução será injetado aqui -->
+                </div>
+            `;
+        }
+
+        // Exibe a evolução do paciente selecionado
+        function showPatientEvolution() {
+            const pacienteId = document.getElementById('paciente-evolucao').value;
+            const evolucaoContent = document.getElementById('evolucao-content');
+            evolucaoContent.classList.remove('hidden');
+            evolucaoContent.innerHTML = '';
+            
+            if (!pacienteId) {
+                evolucaoContent.innerHTML = `<p class="text-center text-gray-500">Selecione um paciente para ver sua evolução.</p>`;
+                return;
+            }
+
+            const paciente = mockPatients.find(p => p.id === pacienteId);
+            
+            evolucaoContent.innerHTML = `
+                <h3 class="text-xl font-semibold mb-4 text-gray-800">Evolução de ${paciente.nome}</h3>
+                
+                <!-- Histórico de Evoluções -->
+                <div class="mb-6">
+                    <h4 class="text-lg font-bold mb-2 text-teal-700">Histórico</h4>
+                    <div class="space-y-4 max-h-64 overflow-y-auto pr-2">
+                        ${paciente.evolucao.length > 0 ? paciente.evolucao.map(evol => `
+                            <div class="p-3 border border-gray-200 rounded-lg bg-white shadow-sm">
+                                <p class="text-xs text-gray-500">${evol.data}</p>
+                                ${evol.tipo === 'evolucao' ? `<p class="text-sm text-gray-700">${evol.texto}</p>` : `<p class="text-sm font-semibold text-orange-600">Lesão por Pressão: ${evol.localizacao} - ${evol.estagio}</p>`}
+                            </div>
+                        `).join('') : `<p class="text-sm text-gray-500">Nenhuma evolução registrada.</p>`}
+                    </div>
+                </div>
+
+                <!-- Adicionar nova evolução -->
+                <div class="bg-gray-100 p-4 rounded-lg">
+                    <h4 class="text-lg font-bold mb-2 text-gray-800">Nova Evolução</h4>
+                    <textarea id="nova-evolucao-texto" placeholder="Descreva a evolução do paciente..." class="w-full h-24 p-2 text-sm rounded-md border-gray-300 shadow-sm focus:ring-teal-500 focus:border-teal-500 resize-none mb-2"></textarea>
+                    <button onclick="adicionarEvolucao('${pacienteId}')" class="bg-blue-500 text-white py-2 px-4 rounded-md text-sm font-semibold hover:bg-blue-600 transition-colors duration-300">Salvar Evolução</button>
+                </div>
+
+                <!-- Adicionar Lesão por Pressão -->
+                <div class="bg-gray-100 p-4 rounded-lg mt-4">
+                    <h4 class="text-lg font-bold mb-2 text-gray-800">Registrar Lesão por Pressão</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label for="lesao-localizacao" class="block text-sm font-medium text-gray-700">Localização:</label>
+                            <input type="text" id="lesao-localizacao" placeholder="Ex: Sacro, Calcanhar" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-orange-500 focus:border-orange-500">
+                        </div>
+                        <div>
+                            <label for="lesao-estagio" class="block text-sm font-medium text-gray-700">Estágio:</label>
+                            <select id="lesao-estagio" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-orange-500 focus:border-orange-500">
+                                <option value="Estágio 1">Estágio 1</option>
+                                <option value="Estágio 2">Estágio 2</option>
+                                <option value="Estágio 3">Estágio 3</option>
+                                <option value="Estágio 4">Estágio 4</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button onclick="adicionarLesaoPressao('${pacienteId}')" class="mt-4 w-full bg-orange-500 text-white py-2 rounded-md font-semibold hover:bg-orange-600 transition-colors duration-300">Registrar Lesão</button>
+                </div>
+                
+                <!-- LLM Integration: Care Plan Generation -->
+                <div class="bg-purple-100 p-4 rounded-lg mt-4 border-2 border-purple-300">
+                    <h4 class="text-lg font-bold mb-3 text-purple-800 flex items-center">
+                        Assistente Inteligente de Cuidados ✨
+                    </h4>
+                    <p class="text-sm text-gray-700 mb-4">Gere um rascunho de Plano de Cuidados (Diagnósticos, Metas e Intervenções de Enfermagem/Fisioterapia) baseado nos dados atuais do paciente.</p>
+                    <button onclick="generateCarePlan('${pacienteId}')" class="w-full bg-purple-600 text-white py-2 rounded-md font-semibold hover:bg-purple-700 transition-colors duration-300">
+                        ✨ Gerar Plano de Cuidados
+                    </button>
+                    <div id="care-plan-output" class="mt-4">
+                        <!-- Output do LLM será injetado aqui -->
+                    </div>
+                </div>
+            `;
+        }
+
+        function adicionarEvolucao(pacienteId) {
+            const texto = document.getElementById('nova-evolucao-texto').value;
+            if (texto) {
+                const paciente = mockPatients.find(p => p.id === pacienteId);
+                paciente.evolucao.push({
+                    tipo: 'evolucao',
+                    data: new Date().toLocaleString(),
+                    texto: texto
+                });
+                document.getElementById('nova-evolucao-texto').value = '';
+                showPatientEvolution();
+            } else {
+                alert('Por favor, digite a nota de evolução.');
+            }
+        }
+        
+        function adicionarLesaoPressao(pacienteId) {
+            const localizacao = document.getElementById('lesao-localizacao').value;
+            const estagio = document.getElementById('lesao-estagio').value;
+            if (localizacao && estagio) {
+                const paciente = mockPatients.find(p => p.id === pacienteId);
+                paciente.evolucao.push({
+                    tipo: 'lesao_por_pressao',
+                    data: new Date().toLocaleString(),
+                    localizacao: localizacao,
+                    estagio: estagio
+                });
+                document.getElementById('lesao-localizacao').value = '';
+                showPatientEvolution();
+            } else {
+                alert('Por favor, preencha a localização e o estágio da lesão.');
+            }
+        }
+        
+        // Exibe a seção inicial ao carregar a página
+        window.onload = () => {
+            showSection('prontuarios');
+        };
+    </script>
+</body>
+</html>
